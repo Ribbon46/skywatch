@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Monochrome variant: single-fill camera + crescent for status bar /
+       themed-icon launchers. Use currentColor so the OS can tint it. -->
+  <g fill="currentColor">
+    <!-- Crescent moon -->
+    <path d="M 360 170 A 70 70 0 1 1 290 240 A 50 50 0 1 0 360 170 Z"/>
+    <!-- Camera body -->
+    <rect x="120" y="320" width="272" height="130" rx="22"/>
+    <!-- Viewfinder hump -->
+    <rect x="210" y="298" width="92" height="32" rx="6"/>
+    <!-- Lens ring + opening -->
+    <circle cx="256" cy="390" r="50" fill="#000"/>
+    <circle cx="256" cy="390" r="40"/>
+    <circle cx="256" cy="390" r="22" fill="#000"/>
+  </g>
+</svg>

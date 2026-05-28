@@ -8,6 +8,7 @@
     "start": "electron .",
     "screenshots": "electron scripts/capture-screenshots.js",
     "build:catalogs": "node scripts/build-catalogs.js",
+    "build:icons": "electron scripts/build-icons.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "dist:win": "electron-builder --win",
