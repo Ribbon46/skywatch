@@ -1,0 +1,35 @@
+# OS noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Editors
+.vscode/
+.idea/
+.claude/
+
+# Local logs / scratch
+legacy/forecast_*.json
+legacy/astro.json
+legacy/analysis*.json
+legacy/__pycache__/
+*.log
+
+# Node (if someone adds dev tooling)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs (if APK wrapping is done locally)
+build/
+dist/
+*.apk
+*.aab
+*.keystore
+keystore.properties
+_*
+
+# Re-add this file once you run 'gh auth refresh -h github.com -s workflow'
+.github/workflows/pages.yml

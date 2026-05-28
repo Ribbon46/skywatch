@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="theme-color" content="#04060e" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="description" content="SkyWatch — open-source astrophotography planning PWA. Tonight verdict, location planner, AR sky, smart camera setup, session log." />
+<title>SkyWatch — Astrophotography Planner</title>
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icon.svg" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <span id="statusDot" class="status-dot"></span>
+  <h1>SkyWatch</h1>
+  <button id="sitePill" class="site-pill" title="Switch site">
+    <span id="siteLabel">…</span>
+  </button>
+  <button id="settingsBtn" class="icon-btn" title="Settings &amp; help">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </button>
+</header>
+
+<main class="wrap">
+  <section id="view-tonight"  class="view"></section>
+  <section id="view-planner"  class="view" hidden></section>
+  <section id="view-sky"      class="view" hidden></section>
+  <section id="view-targets"  class="view" hidden></section>
+  <section id="view-gear"     class="view" hidden></section>
+  <section id="view-sites"    class="view" hidden></section>
+  <section id="view-calendar" class="view" hidden></section>
+  <section id="view-log"      class="view" hidden></section>
+</main>
+
+<nav class="bottomnav" id="bottomnav">
+  <a href="#tonight" data-view="tonight">
+    <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+    Tonight
+  </a>
+  <a href="#planner" data-view="planner">
+    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    Plan
+  </a>
+  <a href="#sky" data-view="sky">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
+    Sky
+  </a>
+  <a href="#targets" data-view="targets">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
+    Targets
+  </a>
+  <a href="#gear" data-view="gear">
+    <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M8 6V4h8v2"/><circle cx="12" cy="13" r="4"/></svg>
+    Gear
+  </a>
+  <a href="#log" data-view="log">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+    Log
+  </a>
+</nav>
+
+<!-- Site switcher dialog -->
+<dialog id="siteDlg">
+  <h3 style="margin:0 0 10px">Observing site</h3>
+  <div id="siteList"></div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="App.useCurrentLocation()">📍 Use my location</button>
+    <button class="btn" onclick="App.openSiteEditor()">＋ New site</button>
+    <button class="btn ghost" onclick="document.getElementById('siteDlg').close()">Close</button>
+  </div>
+</dialog>
+
+<!-- Site editor dialog -->
+<dialog id="siteEditDlg">
+  <h3 style="margin:0 0 10px" id="siteEditTitle">Add site</h3>
+  <form id="siteEditForm" onsubmit="App.saveSite(event); return false;">
+    <input type="hidden" name="id" />
+    <div class="calc-row">
+      <label>Name<input name="name" required placeholder="Home / Dark Site 1" /></label>
+      <label>Bortle (1–9)
+        <select name="bortle">
+          <option value="1">1 — excellent dark</option>
+          <option value="2">2 — typical dark</option>
+          <option value="3">3 — rural</option>
+          <option value="4">4 — rural/suburban</option>
+          <option value="5">5 — suburban</option>
+          <option value="6">6 — bright suburban</option>
+          <option value="7">7 — suburb/urban</option>
+          <option value="8" selected>8 — city</option>
+          <option value="9">9 — inner city</option>
+        </select>
+      </label>
+    </div>
+    <div class="calc-row">
+      <label>Latitude<input name="lat" type="number" step="0.0001" required /></label>
+      <label>Longitude<input name="lon" type="number" step="0.0001" required /></label>
+    </div>
+    <div class="calc-row">
+      <label>Elevation (m)<input name="elevation" type="number" step="1" value="70" /></label>
+      <label>Notes<input name="notes" placeholder="Optional" /></label>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" type="submit">Save</button>
+      <button class="btn ghost" type="button" onclick="document.getElementById('siteEditDlg').close()">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Session log entry editor -->
+<dialog id="logEditDlg">
+  <h3 style="margin:0 0 10px">Session entry</h3>
+  <form id="logEditForm" onsubmit="App.saveLog(event); return false;">
+    <input type="hidden" name="id" />
+    <div class="calc-row">
+      <label>Date<input name="date" type="date" required /></label>
+      <label>Site
+        <select name="siteId" id="logEditSiteSelect"></select>
+      </label>
+    </div>
+    <div class="calc-row">
+      <label>Camera<input name="camera" placeholder="Sony A7 III" /></label>
+      <label>Lens<input name="lens" placeholder="Tamron 17-28 @ 17mm" /></label>
+    </div>
+    <div class="calc-row">
+      <label>Targets (comma)<input name="targets" placeholder="M31, M51, NGC 7000" /></label>
+      <label>Conditions<input name="conditions" placeholder="Clear, calm, dew" /></label>
+    </div>
+    <div class="calc-row">
+      <label>Frames<input name="frames" type="number" min="0" /></label>
+      <label>Seconds each<input name="secondsEach" type="number" min="0" step="0.1" /></label>
+    </div>
+    <div class="calc-row">
+      <label>ISO<input name="iso" type="number" /></label>
+      <label>Aperture (f)<input name="aperture" type="number" step="0.1" /></label>
+    </div>
+    <label style="font-size:12px;color:var(--mut)">Notes
+      <textarea name="notes" placeholder="What worked, what didn't…"></textarea>
+    </label>
+    <div class="btn-row">
+      <button class="btn primary" type="submit">Save entry</button>
+      <button class="btn ghost" type="button" onclick="document.getElementById('logEditDlg').close()">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Settings / Help sheet -->
+<dialog id="settingsDlg" style="max-width:580px;width:95vw">
+  <div id="settingsBody"></div>
+</dialog>
+
+<div id="toast" class="toast" hidden></div>
+
+<!-- Inline catalog data first so app.js doesn't need fetch() (works from file://) -->
+<script src="js/catalogs.js"></script>
+<script src="js/astronomy.js"></script>
+<script src="js/forecast.js"></script>
+<script src="js/camera.js"></script>
+<script src="js/sites.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/log.js"></script>
+<script src="js/planner.js"></script>
+<script src="js/spots-discovery.js"></script>
+<script src="js/ar.js"></script>
+<script src="js/app.js"></script>
+<!-- Surface fatal errors so the page doesn't just go blank -->
+<script>
+window.addEventListener('error', e => {
+  const root = document.querySelector('#view-tonight');
+  if(root && !root.children.length){
+    root.innerHTML = '<div class="error">App failed to start: ' + (e.message||e) + '<br><br>If you opened this file by double-clicking it, your browser may be blocking local file access. Try using <code>launch.bat</code> on Windows or <code>launch.sh</code> on macOS/Linux for a chromeless app window.</div>';
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+[
+  {"id":"QUA","name":"Quadrantids","peakMonth":1,"peakDay":3,"startMonth":12,"startDay":28,"endMonth":1,"endDay":12,"zhr":110,"radiantRA":230,"radiantDec":49,"velocity":41,"notes":"Sharp peak ~6h. Cold-weather shower. Radiant in northern Boötes."},
+  {"id":"LYR","name":"Lyrids","peakMonth":4,"peakDay":22,"startMonth":4,"startDay":16,"endMonth":4,"endDay":25,"zhr":18,"radiantRA":272,"radiantDec":33,"velocity":49,"notes":"Bright meteors, occasional fireballs. Radiant near Vega."},
+  {"id":"ETA","name":"Eta Aquariids","peakMonth":5,"peakDay":6,"startMonth":4,"startDay":19,"endMonth":5,"endDay":28,"zhr":50,"radiantRA":338,"radiantDec":-1,"velocity":66,"notes":"Halley's Comet debris. Best pre-dawn. Better seen from southern hemisphere."},
+  {"id":"SDA","name":"Southern δ Aquariids","peakMonth":7,"peakDay":30,"startMonth":7,"startDay":12,"endMonth":8,"endDay":23,"zhr":25,"radiantRA":340,"radiantDec":-16,"velocity":41,"notes":"Steady rate over many nights, no sharp peak."},
+  {"id":"PER","name":"Perseids","peakMonth":8,"peakDay":12,"startMonth":7,"startDay":17,"endMonth":8,"endDay":24,"zhr":100,"radiantRA":48,"radiantDec":58,"velocity":59,"notes":"Most reliable summer shower. Comet Swift-Tuttle. Best for photography."},
+  {"id":"DRA","name":"Draconids","peakMonth":10,"peakDay":8,"startMonth":10,"startDay":6,"endMonth":10,"endDay":10,"zhr":10,"radiantRA":262,"radiantDec":54,"velocity":20,"notes":"Slow meteors. Can outburst unpredictably. Evening shower."},
+  {"id":"ORI","name":"Orionids","peakMonth":10,"peakDay":21,"startMonth":10,"startDay":2,"endMonth":11,"endDay":7,"zhr":20,"radiantRA":95,"radiantDec":16,"velocity":66,"notes":"Halley's Comet debris (second). Fast and faint."},
+  {"id":"LEO","name":"Leonids","peakMonth":11,"peakDay":17,"startMonth":11,"startDay":6,"endMonth":11,"endDay":30,"zhr":15,"radiantRA":152,"radiantDec":22,"velocity":71,"notes":"33-year cycle: storm years (~1999) produce thousands; off years ~15."},
+  {"id":"GEM","name":"Geminids","peakMonth":12,"peakDay":14,"startMonth":12,"startDay":4,"endMonth":12,"endDay":17,"zhr":150,"radiantRA":112,"radiantDec":33,"velocity":35,"notes":"Strongest annual shower. Slow, bright multi-colored meteors. Asteroid 3200 Phaethon."},
+  {"id":"URS","name":"Ursids","peakMonth":12,"peakDay":22,"startMonth":12,"startDay":17,"endMonth":12,"endDay":26,"zhr":10,"radiantRA":217,"radiantDec":76,"velocity":33,"notes":"Circumpolar from N hemisphere — visible all night."}
+]

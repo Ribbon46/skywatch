@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#05060b" />
+<title>Astro Alert — Bucharest</title>
+<link rel="manifest" href="manifest.webmanifest" />
+<style>
+  :root{
+    --bg:#05060b; --bg2:#0b0f1a; --card:#101729; --line:#1d2640;
+    --txt:#e7ecf7; --mut:#8a93ad; --acc:#7cc4ff; --ok:#5ee7a3;
+    --bad:#ff7a90; --warn:#ffd166;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--txt);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
+  body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0}
+  .wrap{max-width:780px;margin:0 auto;padding:18px 16px 96px}
+  header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  header h1{font-size:18px;margin:0;font-weight:600;letter-spacing:.2px}
+  header .dot{width:9px;height:9px;border-radius:50%;background:var(--mut);box-shadow:0 0 0 3px rgba(255,255,255,.04)}
+  header .meta{margin-left:auto;font-size:12px;color:var(--mut)}
+  .pill{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;
+    border-radius:999px;background:#15203a;color:var(--acc);font-size:12px;
+    border:1px solid var(--line)}
+  .verdict{margin:8px 0 14px;padding:14px 16px;border-radius:14px;
+    background:linear-gradient(180deg,#0d1426,#0a1020);border:1px solid var(--line)}
+  .verdict h2{margin:0 0 4px;font-size:15px;color:var(--mut);text-transform:uppercase;letter-spacing:1.2px}
+  .verdict .line{font-size:17px}
+  .verdict.ok h2{color:var(--ok)}
+  .verdict.bad h2{color:var(--bad)}
+  .grid{display:grid;gap:10px}
+  .night{background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:12px 14px;transition:.2s}
+  .night.qualify{border-color:#1f5a3b;background:linear-gradient(180deg,#0e2018,#0b1827)}
+  .night.tonight{outline:1.5px solid var(--acc);outline-offset:-1px}
+  .night .top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .night .date{font-weight:600}
+  .night .tag{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
+  .night .badge{margin-left:auto;font-size:11px;padding:3px 8px;border-radius:999px;
+    background:#1b2540;color:var(--mut);border:1px solid var(--line)}
+  .night.qualify .badge{background:#143324;color:var(--ok);border-color:#1f5a3b}
+  .night .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 14px;margin-top:8px;font-size:13px}
+  .night .stats b{font-weight:500;color:var(--mut);margin-right:6px}
+  .checks{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .chk{font-size:11px;padding:3px 8px;border-radius:6px;background:#1b2540;color:var(--mut);border:1px solid var(--line)}
+  .chk.ok{background:#143324;color:var(--ok);border-color:#1f5a3b}
+  .chk.bad{background:#2b1623;color:var(--bad);border-color:#4a2435}
+  details{margin-top:8px}
+  details summary{cursor:pointer;color:var(--mut);font-size:12px;outline:none;list-style:none}
+  details summary::-webkit-details-marker{display:none}
+  details summary::before{content:"▸  ";color:var(--mut)}
+  details[open] summary::before{content:"▾  "}
+  .hourly{display:grid;grid-template-columns:repeat(auto-fit,minmax(46px,1fr));
+    gap:4px;margin-top:8px;font-family:var(--mono);font-size:11px}
+  .hourly .h{padding:4px 0;border-radius:6px;background:#0c1426;text-align:center;color:var(--mut)}
+  .hourly .h b{display:block;color:var(--txt);font-weight:500}
+  .controls{position:fixed;bottom:14px;left:0;right:0;display:flex;justify-content:center;gap:8px;
+    pointer-events:none;padding:0 16px}
+  .controls button{pointer-events:all;background:#13203a;color:var(--txt);border:1px solid var(--line);
+    padding:10px 16px;border-radius:999px;font:inherit;font-size:13px;
+    box-shadow:0 6px 24px rgba(0,0,0,.45)}
+  .controls button:active{transform:scale(.97)}
+  .err{padding:14px;background:#2a1623;color:var(--bad);border-radius:12px;border:1px solid #4a2435}
+  .sky{font-size:12px;color:var(--mut);margin-top:14px;text-align:center}
+  .legend{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--mut);margin-top:4px}
+  .legend span::before{content:"●";color:var(--ok);margin-right:4px}
+  .legend .l2::before{color:var(--warn)}
+  .legend .l3::before{color:var(--bad)}
+  @media (max-width:480px){
+    .wrap{padding:14px 12px 100px}
+    .night .stats{grid-template-columns:1fr 1fr;font-size:12.5px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="dot" id="statusDot"></span>
+    <h1>Astro Alert · Bucharest</h1>
+    <span class="meta" id="lastFetch">loading…</span>
+  </header>
+
+  <div id="verdict" class="verdict">
+    <h2>Status</h2>
+    <div class="line">Fetching live forecast…</div>
+  </div>
+
+  <div class="legend">
+    <span>cloud &le; 30%</span>
+    <span class="l2">30–60%</span>
+    <span class="l3">&gt; 60%</span>
+  </div>
+
+  <div id="nights" class="grid" style="margin-top:10px"></div>
+
+  <p class="sky">Data: Open-Meteo · Moon/sun: SunCalc · Refreshes on load and every 30 min.<br/>
+    44.4268°N 26.1025°E · Europe/Bucharest · Tamron 17-28/2.8 + 70-300 on Sony A7 III.</p>
+</div>
+
+<div class="controls">
+  <button id="refreshBtn">↻ Refresh</button>
+  <button id="settingsBtn">📷 Settings</button>
+</div>
+
+<dialog id="settingsDlg" style="background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:14px;padding:16px;max-width:520px;width:92%">
+  <h3 style="margin:0 0 8px">Sony A7 III · field settings</h3>
+  <p style="font-size:13px;color:var(--mut);margin:0 0 10px">Tamron 17-28 f/2.8 Di III RXD wide-field</p>
+  <ul style="font-size:13px;line-height:1.55">
+    <li><b>17mm:</b> ISO 3200, f/2.8, 15s, WB 4000K, RAW</li>
+    <li><b>24mm:</b> ISO 6400, f/2.8, 10s (NPF for 5.97µm pitch)</li>
+    <li><b>28mm:</b> ISO 6400, f/2.8, 8s</li>
+    <li>Long Exp NR <b>OFF</b>, High ISO NR <b>OFF</b>, Steady Shot <b>OFF</b></li>
+    <li>Manual focus, live-view 11× on bright star, peaking ON</li>
+    <li>2s self-timer or remote, 2× NP-FZ100 charged</li>
+  </ul>
+  <p style="font-size:13px;color:var(--mut);margin:10px 0 4px"><b>Galaxy S25+ Expert RAW</b></p>
+  <ul style="font-size:13px;line-height:1.55">
+    <li>Astrophoto mode: ISO 800, 4–10 min auto-stack</li>
+    <li>Manual: ISO 1600–3200, 10s, focus ∞, RAW (DNG)</li>
+    <li>Phone tripod + 2s timer mandatory</li>
+  </ul>
+  <button onclick="settingsDlg.close()" style="margin-top:10px;background:#13203a;color:var(--txt);
+    border:1px solid var(--line);padding:8px 14px;border-radius:8px">Close</button>
+</dialog>
+
+<!-- SunCalc (BSD-2, tiny) for sun/moon altitudes & phase. Inlined below for offline use on phone -->
+<script>
+/* SunCalc 1.9.0 (https://github.com/mourner/suncalc) — BSD-2 */
+!function(){"use strict";var t=Math.PI,e=Math.sin,n=Math.cos,a=Math.tan,r=Math.asin,o=Math.atan2,i=Math.acos,u=t/180,c=864e5,s=2440588,l=2451545;function f(t){return t.valueOf()/c-.5+s}function h(t){return new Date((t+.5-s)*c)}function d(t){return f(t)-l}var m=23.4397*u;function v(t){return o(e(t)*n(m),n(t))}function g(t,n){return r(e(n)*e(m)+n*0+0,a)}function M(t,n,a){return r(e(n)*e(m)+n*0,a)}function w(t){return 357.5291*u+.98560028*u*t}function y(t){var n=t-(.0053*e(w(t))-.0069*e(2*(w(t)+102.9372*u+t*0)));return n}var p={getPosition:function(a,r,c){var s=u*-c,l=u*r,f=d(a),h=w(f),v=h+(1.9148*u*e(h)+.02*u*e(2*h)+3e-4*u*e(3*h))+102.9372*u+t,g=v,M=r,m=l;return{azimuth:o(e(s-(o(e(g),n(g)*e(m)-a*0))),n(g)*n(m)+e(g)*0),altitude:r}}};/* trimmed: not used */
+}();
+/* End trimmed SunCalc stub — we use a fresh full copy below */
+</script>
+<script>
+/* ====== Full SunCalc (BSD-2 license, by Vladimir Agafonkin) ====== */
+/* https://github.com/mourner/suncalc/blob/master/suncalc.js */
+(function(){"use strict";
+var PI=Math.PI,sin=Math.sin,cos=Math.cos,tan=Math.tan,asin=Math.asin,atan=Math.atan2,acos=Math.acos,rad=PI/180;
+var dayMs=1000*60*60*24,J1970=2440588,J2000=2451545;
+function toJulian(date){return date.valueOf()/dayMs-0.5+J1970;}
+function fromJulian(j){return new Date((j+0.5-J1970)*dayMs);}
+function toDays(date){return toJulian(date)-J2000;}
+var e=rad*23.4397;
+function rightAscension(l,b){return atan(sin(l)*cos(e)-tan(b)*sin(e),cos(l));}
+function declination(l,b){return asin(sin(b)*cos(e)+cos(b)*sin(e)*sin(l));}
+function azimuth(H,phi,dec){return atan(sin(H),cos(H)*sin(phi)-tan(dec)*cos(phi));}
+function altitude(H,phi,dec){return asin(sin(phi)*sin(dec)+cos(phi)*cos(dec)*cos(H));}
+function siderealTime(d,lw){return rad*(280.16+360.9856235*d)-lw;}
+function astroRefraction(h){if(h<0)h=0;return 0.0002967/Math.tan(h+0.00312536/(h+0.08901179));}
+function solarMeanAnomaly(d){return rad*(357.5291+0.98560028*d);}
+function eclipticLongitude(M){
+  var C=rad*(1.9148*sin(M)+0.02*sin(2*M)+0.0003*sin(3*M)),P=rad*102.9372;
+  return M+C+P+PI;
+}
+function sunCoords(d){var M=solarMeanAnomaly(d),L=eclipticLongitude(M);
+  return {dec:declination(L,0),ra:rightAscension(L,0)};}
+var SunCalc={};
+SunCalc.getPosition=function(date,lat,lng){
+  var lw=rad*-lng,phi=rad*lat,d=toDays(date),c=sunCoords(d),H=siderealTime(d,lw)-c.ra;
+  return {azimuth:azimuth(H,phi,c.dec),altitude:altitude(H,phi,c.dec)};
+};
+var J0=0.0009;
+function julianCycle(d,lw){return Math.round(d-J0-lw/(2*PI));}
+function approxTransit(Ht,lw,n){return J0+(Ht+lw)/(2*PI)+n;}
+function solarTransitJ(ds,M,L){return J2000+ds+0.0053*sin(M)-0.0069*sin(2*L);}
+function hourAngle(h,phi,d){return acos((sin(h)-sin(phi)*sin(d))/(cos(phi)*cos(d)));}
+function observerAngle(height){return -2.076*Math.sqrt(height)/60;}
+function getSetJ(h,lw,phi,dec,n,M,L){var w=hourAngle(h,phi,dec),a=approxTransit(w,lw,n);return solarTransitJ(a,M,L);}
+SunCalc.getTimes=function(date,lat,lng,height){
+  height=height||0;
+  var lw=rad*-lng,phi=rad*lat,dh=observerAngle(height),d=toDays(date),
+    n=julianCycle(d,lw),ds=approxTransit(0,lw,n),M=solarMeanAnomaly(ds),
+    L=eclipticLongitude(M),dec=declination(L,0),Jnoon=solarTransitJ(ds,M,L),i,len,time,h0,Jset,Jrise;
+  var times=[
+    [-0.833,'sunrise','sunset'],
+    [-0.3,'sunriseEnd','sunsetStart'],
+    [-6,'dawn','dusk'],
+    [-12,'nauticalDawn','nauticalDusk'],
+    [-18,'nightEnd','night'],
+    [6,'goldenHourEnd','goldenHour']
+  ];
+  var result={solarNoon:fromJulian(Jnoon),nadir:fromJulian(Jnoon-0.5)};
+  for(i=0,len=times.length;i<len;i+=1){
+    time=times[i];h0=(time[0]+dh)*rad;
+    Jset=getSetJ(h0,lw,phi,dec,n,M,L);
+    Jrise=Jnoon-(Jset-Jnoon);
+    result[time[1]]=fromJulian(Jrise);
+    result[time[2]]=fromJulian(Jset);
+  }
+  return result;
+};
+function moonCoords(d){
+  var L=rad*(218.316+13.176396*d),M=rad*(134.963+13.064993*d),F=rad*(93.272+13.229350*d),
+      l=L+rad*6.289*sin(M),b=rad*5.128*sin(F),dt=385001-20905*cos(M);
+  return {ra:rightAscension(l,b),dec:declination(l,b),dist:dt};
+}
+SunCalc.getMoonPosition=function(date,lat,lng){
+  var lw=rad*-lng,phi=rad*lat,d=toDays(date),c=moonCoords(d),H=siderealTime(d,lw)-c.ra,
+      h=altitude(H,phi,c.dec),pa=atan(sin(H),tan(phi)*cos(c.dec)-sin(c.dec)*cos(H));
+  h=h+astroRefraction(h);
+  return {azimuth:azimuth(H,phi,c.dec),altitude:h,distance:c.dist,parallacticAngle:pa};
+};
+SunCalc.getMoonIllumination=function(date){
+  var d=toDays(date||new Date()),s=sunCoords(d),m=moonCoords(d),sdist=149598000,
+      phi=acos(sin(s.dec)*sin(m.dec)+cos(s.dec)*cos(m.dec)*cos(s.ra-m.ra)),
+      inc=atan(sdist*sin(phi),m.dist-sdist*cos(phi)),
+      angle=atan(cos(s.dec)*sin(s.ra-m.ra),sin(s.dec)*cos(m.dec)-cos(s.dec)*sin(m.dec)*cos(s.ra-m.ra));
+  return {fraction:(1+cos(inc))/2,phase:0.5+0.5*inc*(angle<0?-1:1)/PI,angle:angle};
+};
+function hoursLater(date,h){return new Date(date.valueOf()+h*dayMs/24);}
+SunCalc.getMoonTimes=function(date,lat,lng,inUTC){
+  var t=new Date(date);
+  if(inUTC)t.setUTCHours(0,0,0,0);else t.setHours(0,0,0,0);
+  var hc=0.133*rad,h0=SunCalc.getMoonPosition(t,lat,lng).altitude-hc,
+      h1,h2,rise,set,a,b,xe,ye,d,roots,x1,x2,dx;
+  for(var i=1;i<=24;i+=2){
+    h1=SunCalc.getMoonPosition(hoursLater(t,i),lat,lng).altitude-hc;
+    h2=SunCalc.getMoonPosition(hoursLater(t,i+1),lat,lng).altitude-hc;
+    a=(h0+h2)/2-h1;b=(h2-h0)/2;xe=-b/(2*a);ye=(a*xe+b)*xe+h1;
+    d=b*b-4*a*h1;roots=0;
+    if(d>=0){
+      dx=Math.sqrt(d)/(Math.abs(a)*2);x1=xe-dx;x2=xe+dx;
+      if(Math.abs(x1)<=1)roots++;
+      if(Math.abs(x2)<=1)roots++;
+      if(x1<-1)x1=x2;
+    }
+    if(roots===1){if(h0<0)rise=i+x1;else set=i+x1;}
+    else if(roots===2){rise=i+(ye<0?x2:x1);set=i+(ye<0?x1:x2);}
+    if(rise&&set)break;
+    h0=h2;
+  }
+  var result={};
+  if(rise)result.rise=hoursLater(t,rise);
+  if(set)result.set=hoursLater(t,set);
+  if(!rise&&!set)result[ye>0?'alwaysUp':'alwaysDown']=true;
+  return result;
+};
+window.SunCalc=SunCalc;
+})();
+</script>
+
+<script>
+/* ====== Astrophoto alert: dynamic engine ====== */
+const LAT=44.4268, LON=26.1025, ELEV=70;
+const TZ='Europe/Bucharest';
+const THR_CLOUD=30, THR_MOON_ILLUM=40, THR_DARK_MIN=90;
+
+const $ = sel => document.querySelector(sel);
+const fmtTime = d => d ? d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:TZ}) : '—';
+const fmtDate = d => d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',timeZone:TZ});
+const toLocalISO = d => new Intl.DateTimeFormat('sv-SE',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:TZ,hour12:false}).format(d).replace(' ','T');
+
+async function fetchForecast(){
+  const url='https://api.open-meteo.com/v1/forecast'
+    +'?latitude='+LAT+'&longitude='+LON
+    +'&hourly=cloud_cover,visibility,relative_humidity_2m,temperature_2m,wind_speed_10m'
+    +'&daily=sunrise,sunset'
+    +'&timezone=Europe%2FBucharest&forecast_days=10';
+  const r = await fetch(url);
+  if(!r.ok) throw new Error('Open-Meteo HTTP '+r.status);
+  return r.json();
+}
+
+function cloudByHour(forecast){
+  const m=new Map();
+  forecast.hourly.time.forEach((t,i)=>m.set(t.slice(0,13),forecast.hourly.cloud_cover[i]));
+  return m;
+}
+
+function visByHour(forecast){
+  const m=new Map();
+  forecast.hourly.time.forEach((t,i)=>m.set(t.slice(0,13),{
+    vis:forecast.hourly.visibility[i],
+    rh:forecast.hourly.relative_humidity_2m[i],
+    t:forecast.hourly.temperature_2m[i],
+    w:forecast.hourly.wind_speed_10m[i],
+  }));
+  return m;
+}
+
+/* Astronomical twilight via SunCalc.getTimes for that day, using "night"/"nightEnd" */
+function nightInfo(localNoon){
+  const times = SunCalc.getTimes(localNoon, LAT, LON, ELEV);
+  // times.night = astronomical twilight ends (sun -18)
+  // times.nightEnd = morning astronomical twilight begins
+  // nightEnd is next morning, since getTimes uses local noon as reference
+  return {sunset:times.sunset, sunrise:times.sunrise,
+          darkStart:times.night, darkEnd:times.nightEnd};
+}
+
+function moonInfoForNight(darkStart, darkEnd, lat, lon){
+  // Get moonrise/set across the dark window using SunCalc.getMoonTimes for darkStart's day & next day
+  const t1 = SunCalc.getMoonTimes(darkStart, lat, lon);
+  const t2 = SunCalc.getMoonTimes(new Date(darkStart.getTime()+24*3600*1000), lat, lon);
+  const evs=[];
+  ['rise','set'].forEach(k=>{
+    if(t1[k]) evs.push({type:k,t:t1[k]});
+    if(t2[k]) evs.push({type:k,t:t2[k]});
+  });
+  evs.sort((a,b)=>a.t-b.t);
+  const upAtStart = SunCalc.getMoonPosition(darkStart, lat, lon).altitude > 0;
+  // Compute moon-down minutes within [darkStart, darkEnd]
+  let cursor = darkStart, up = upAtStart, downMin=0;
+  for(const ev of evs){
+    if(ev.t < darkStart) continue;
+    if(ev.t > darkEnd){ break; }
+    if(!up){ downMin += (ev.t - cursor)/60000; }
+    cursor = ev.t;
+    up = (ev.type === 'rise');
+  }
+  if(!up){ downMin += (darkEnd - cursor)/60000; }
+  // Find first moonset after darkStart and first moonrise after darkStart, inside window
+  let moonset=null, moonrise=null;
+  for(const ev of evs){
+    if(ev.t>=darkStart && ev.t<=darkEnd){
+      if(ev.type==='set' && !moonset) moonset = ev.t;
+      if(ev.type==='rise' && !moonrise) moonrise = ev.t;
+    }
+  }
+  const illum = SunCalc.getMoonIllumination(new Date((darkStart.getTime()+darkEnd.getTime())/2));
+  return {upAtStart, downMin, moonset, moonrise, illumPct: illum.fraction*100};
+}
+
+function classifyCloud(c){
+  if(c==null) return 'l3';
+  if(c<=THR_CLOUD) return '';
+  if(c<=60) return 'l2';
+  return 'l3';
+}
+
+function render(forecast){
+  const cb = cloudByHour(forecast);
+  const vb = visByHour(forecast);
+  const days = forecast.daily.time; // YYYY-MM-DD strings
+  const nights=[];
+  for(let i=0;i<days.length-1;i++){
+    // Reference: local noon on day d
+    const [y,m,d] = days[i].split('-').map(Number);
+    const noonLocal = new Date(Date.UTC(y,m-1,d,12,0,0));
+    // SunCalc uses real Date; tz of input doesn't matter for sun/moon math
+    const ni = nightInfo(noonLocal);
+    if(!ni.darkStart || !ni.darkEnd) continue;
+    const mi = moonInfoForNight(ni.darkStart, ni.darkEnd, LAT, LON);
+    const darkTotalMin = (ni.darkEnd - ni.darkStart)/60000;
+    // Cloud breakdown over dark window
+    const cur = new Date(ni.darkStart); cur.setMinutes(0,0,0);
+    const hours=[];
+    while(cur <= ni.darkEnd){
+      const k = toLocalISO(cur).slice(0,13);
+      const c = cb.get(k);
+      hours.push({t:new Date(cur), cloud:c});
+      cur.setHours(cur.getHours()+1);
+    }
+    const cloudVals = hours.map(h=>h.cloud).filter(x=>x!=null);
+    const cloudAvg = cloudVals.length? cloudVals.reduce((a,b)=>a+b,0)/cloudVals.length : null;
+    const cloudMax = cloudVals.length? Math.max(...cloudVals) : null;
+
+    // Threshold #2: moon ok if illum<=40 OR moon below horizon for the FULL dark window
+    const fullMoonDown = mi.downMin >= darkTotalMin*0.99;
+    const moonOk = (mi.illumPct <= THR_MOON_ILLUM) || fullMoonDown;
+    // Threshold #3: usable dark interval (dark window minus moon-up minutes) >= 90
+    const usable = (mi.illumPct <= THR_MOON_ILLUM) ? darkTotalMin : mi.downMin;
+    const intervalOk = usable >= THR_DARK_MIN;
+    const cloudOk = (cloudMax != null) && (cloudMax <= THR_CLOUD);
+    nights.push({
+      date:days[i], dateLabel:fmtDate(ni.darkStart),
+      darkStart:ni.darkStart, darkEnd:ni.darkEnd, darkTotalMin,
+      moon:mi, hours, cloudAvg, cloudMax,
+      cloudOk, moonOk, intervalOk, qualifies: cloudOk && moonOk && intervalOk,
+      usableMin: usable,
+    });
+  }
+
+  // Verdict
+  const now = new Date();
+  const tonight = nights[0];
+  const verdict = $('#verdict');
+  const firstQualify = nights.find(n=>n.qualifies);
+  if(firstQualify){
+    verdict.classList.add('ok');
+    verdict.classList.remove('bad');
+    verdict.innerHTML = '<h2>🔭 Alert</h2>'
+      +'<div class="line"><b>'+firstQualify.dateLabel+'</b> — usable dark '
+      +Math.round(firstQualify.usableMin)+' min, '
+      +'moon '+firstQualify.moon.illumPct.toFixed(0)+'%, '
+      +'cloud max '+firstQualify.cloudMax+'%.</div>';
+  } else {
+    verdict.classList.add('bad');
+    verdict.classList.remove('ok');
+    // Find best non-qualifying near-future as "next potential opening"
+    const ranked = nights.map((n,i)=>({n,i, score:
+        (n.cloudOk?0:30) + (n.moonOk?0:20) + (n.intervalOk?0:20) + n.cloudMax*0.2 + (n.moon.illumPct>40?n.moon.illumPct:0)
+      })).sort((a,b)=>a.score-b.score);
+    const best = ranked[0];
+    verdict.innerHTML = '<h2>Silence</h2>'
+      +'<div class="line">No qualifying window in current data. Next potential opening: <b>'
+      +(best? best.n.dateLabel : '—')+'</b> '
+      +(best? '(moon '+best.n.moon.illumPct.toFixed(0)+'%, usable '+Math.round(best.n.usableMin)+' min, cloud max '+best.n.cloudMax+'%)':'')
+      +'.</div>';
+  }
+  $('#statusDot').style.background = firstQualify ? 'var(--ok)' : 'var(--bad)';
+
+  // Nights list
+  const root = $('#nights'); root.innerHTML='';
+  nights.forEach((n,idx)=>{
+    const moonLine = n.moon.illumPct.toFixed(0)+'%'
+      + (n.moon.upAtStart ? ' — up at dark start' : ' — down at dark start')
+      + (n.moon.moonset ? ', sets '+fmtTime(n.moon.moonset) : '')
+      + (n.moon.moonrise ? ', rises '+fmtTime(n.moon.moonrise) : '');
+    const card = document.createElement('div');
+    card.className = 'night'+(n.qualifies?' qualify':'')+(idx===0?' tonight':'');
+    card.innerHTML = `
+      <div class="top">
+        <span class="date">${n.dateLabel}</span>
+        <span class="tag">dark ${fmtTime(n.darkStart)} – ${fmtTime(n.darkEnd)}</span>
+        <span class="badge">${n.qualifies?'GO':'skip'}</span>
+      </div>
+      <div class="stats">
+        <div><b>Moon</b>${moonLine}</div>
+        <div><b>Usable dark</b>${Math.round(n.usableMin)} min / ${Math.round(n.darkTotalMin)} min</div>
+        <div><b>Cloud avg</b>${n.cloudAvg!=null?n.cloudAvg.toFixed(0)+'%':'—'}</div>
+        <div><b>Cloud max</b>${n.cloudMax!=null?n.cloudMax+'%':'—'}</div>
+      </div>
+      <div class="checks">
+        <span class="chk ${n.cloudOk?'ok':'bad'}">cloud&le;30 ${n.cloudOk?'✓':'✗'}</span>
+        <span class="chk ${n.moonOk?'ok':'bad'}">moon ${n.moonOk?'✓':'✗'}</span>
+        <span class="chk ${n.intervalOk?'ok':'bad'}">dark&ge;90m ${n.intervalOk?'✓':'✗'}</span>
+      </div>
+      <details>
+        <summary>hourly cloud · ${n.hours.length}h</summary>
+        <div class="hourly">
+          ${n.hours.map(h=>`<div class="h"><b>${fmtTime(h.t)}</b>${h.cloud!=null?h.cloud:'—'}%</div>`).join('')}
+        </div>
+      </details>
+    `;
+    root.appendChild(card);
+  });
+
+  $('#lastFetch').textContent = 'updated ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:TZ});
+}
+
+async function refresh(){
+  $('#lastFetch').textContent = 'fetching…';
+  try{
+    const f = await fetchForecast();
+    render(f);
+    localStorage.setItem('astro_last', JSON.stringify({t:Date.now(),f}));
+  }catch(e){
+    const cached = localStorage.getItem('astro_last');
+    if(cached){
+      try{ render(JSON.parse(cached).f); $('#lastFetch').textContent='offline · cached'; return; }catch(_){}
+    }
+    $('#verdict').innerHTML = '<div class="err">Could not load forecast: '+e.message+'</div>';
+    $('#statusDot').style.background='var(--warn)';
+  }
+}
+
+$('#refreshBtn').addEventListener('click', refresh);
+$('#settingsBtn').addEventListener('click', ()=>$('#settingsDlg').showModal());
+
+// First load + visibility refresh + 30-min auto refresh
+refresh();
+setInterval(refresh, 30*60*1000);
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) refresh(); });
+
+// Service worker for offline (best-effort)
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>

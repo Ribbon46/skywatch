@@ -1,0 +1,31 @@
+{
+  "name": "SkyWatch — Astrophotography Planner",
+  "short_name": "SkyWatch",
+  "description": "Live cloud forecasts, moon, deep-sky targets, camera calculators, and session log for astrophotography. Works offline.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait",
+  "background_color": "#05060b",
+  "theme_color": "#05060b",
+  "categories": ["photo", "utilities", "education"],
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "icon.svg",     "sizes": "any",     "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png",     "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png",     "purpose": "any maskable" }
+  ],
+  "screenshots": [
+    { "src": "screenshots/tonight.png", "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow", "label": "Tonight verdict + key facts" },
+    { "src": "screenshots/planner.png", "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow", "label": "Planner — tiered observing spots" },
+    { "src": "screenshots/sky.png",     "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow", "label": "Live sky + AR launch" },
+    { "src": "screenshots/gear.png",    "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow", "label": "Smart Setup — auto-generated camera recipe" }
+  ],
+  "shortcuts": [
+    { "name": "Tonight", "url": "index.html#tonight", "short_name": "Tonight" },
+    { "name": "Sky now", "url": "index.html#sky",     "short_name": "Sky" },
+    { "name": "Targets", "url": "index.html#targets", "short_name": "Targets" },
+    { "name": "Gear",    "url": "index.html#gear",    "short_name": "Gear" }
+  ]
+}

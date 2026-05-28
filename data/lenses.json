@@ -1,0 +1,63 @@
+[
+  {"id":"sony-fe-14gm","brand":"Sony","model":"FE 14mm f/1.8 GM","mount":"Sony E","focalMin":14,"focalMax":14,"apertureMin":1.8,"apertureMax":16,"weight":460,"astroRating":5,"notes":"Reference ultra-wide astro lens. Almost no coma at f/1.8."},
+  {"id":"sony-fe-20g","brand":"Sony","model":"FE 20mm f/1.8 G","mount":"Sony E","focalMin":20,"focalMax":20,"apertureMin":1.8,"apertureMax":22,"weight":373,"astroRating":5,"notes":"Light, sharp, affordable. Excellent for tracked or untracked MW."},
+  {"id":"sony-fe-24gm","brand":"Sony","model":"FE 24mm f/1.4 GM","mount":"Sony E","focalMin":24,"focalMax":24,"apertureMin":1.4,"apertureMax":16,"weight":445,"astroRating":5,"notes":"Classic Milky Way focal length, f/1.4 speed."},
+  {"id":"sony-fe-2470gm2","brand":"Sony","model":"FE 24-70mm f/2.8 GM II","mount":"Sony E","focalMin":24,"focalMax":70,"apertureMin":2.8,"apertureMax":22,"weight":695,"astroRating":4,"notes":"Workhorse zoom. Astro-capable but heavy."},
+  {"id":"sony-fe-35gm","brand":"Sony","model":"FE 35mm f/1.4 GM","mount":"Sony E","focalMin":35,"focalMax":35,"apertureMin":1.4,"apertureMax":16,"weight":524,"astroRating":4,"notes":"Mid-wide fast prime."},
+  {"id":"sony-fe-85gm","brand":"Sony","model":"FE 85mm f/1.4 GM II","mount":"Sony E","focalMin":85,"focalMax":85,"apertureMin":1.4,"apertureMax":16,"weight":642,"astroRating":3,"notes":"Tracked DSO portrait FL."},
+  {"id":"sony-fe-200600g","brand":"Sony","model":"FE 200-600mm f/5.6-6.3 G","mount":"Sony E","focalMin":200,"focalMax":600,"apertureMin":5.6,"apertureMax":32,"weight":2115,"astroRating":3,"notes":"Wildlife zoom — usable for moon + small DSO with tracker."},
+
+  {"id":"tamron-17-28","brand":"Tamron","model":"17-28mm f/2.8 Di III RXD","mount":"Sony E","focalMin":17,"focalMax":28,"apertureMin":2.8,"apertureMax":22,"weight":420,"astroRating":4,"notes":"Compact wide zoom, sharp corner-to-corner on FF at f/2.8. Excellent for Milky Way."},
+  {"id":"tamron-28-75g2","brand":"Tamron","model":"28-75mm f/2.8 Di III VXD G2","mount":"Sony E","focalMin":28,"focalMax":75,"apertureMin":2.8,"apertureMax":22,"weight":540,"astroRating":3,"notes":"Lightweight standard zoom."},
+  {"id":"tamron-35-150","brand":"Tamron","model":"35-150mm f/2-2.8 Di III VXD","mount":"Sony E","focalMin":35,"focalMax":150,"apertureMin":2.0,"apertureMax":22,"weight":1165,"astroRating":4,"notes":"Variable f/2 wide end. Heavy but versatile for tracked DSO at 70-150mm."},
+  {"id":"tamron-70-180","brand":"Tamron","model":"70-180mm f/2.8 Di III VXD G2","mount":"Sony E","focalMin":70,"focalMax":180,"apertureMin":2.8,"apertureMax":22,"weight":855,"astroRating":3,"notes":"Compact tele for tracked DSO."},
+  {"id":"tamron-70-300","brand":"Tamron","model":"70-300mm f/4.5-6.3 Di III RXD","mount":"Sony E","focalMin":70,"focalMax":300,"apertureMin":4.5,"apertureMax":22,"weight":545,"astroRating":2,"notes":"Travel tele. f/6.3 at 300mm — needs longer subs."},
+  {"id":"tamron-150-500","brand":"Tamron","model":"150-500mm f/5-6.7 Di III VC VXD","mount":"Sony E","focalMin":150,"focalMax":500,"apertureMin":5.0,"apertureMax":32,"weight":1725,"astroRating":2,"notes":"Long tele. Moon & lunar/solar transits."},
+
+  {"id":"sigma-14-14","brand":"Sigma","model":"14mm f/1.4 DG DN Art","mount":"Sony E","focalMin":14,"focalMax":14,"apertureMin":1.4,"apertureMax":16,"weight":1170,"astroRating":5,"notes":"Brightest 14mm in the world. Designed for astro — minimal coma."},
+  {"id":"sigma-14-24","brand":"Sigma","model":"14-24mm f/2.8 DG DN Art","mount":"Sony E","focalMin":14,"focalMax":24,"apertureMin":2.8,"apertureMax":22,"weight":795,"astroRating":4,"notes":"Wide Milky Way zoom."},
+  {"id":"sigma-16-28","brand":"Sigma","model":"16-28mm f/2.8 DG DN","mount":"Sony E","focalMin":16,"focalMax":28,"apertureMin":2.8,"apertureMax":22,"weight":450,"astroRating":4,"notes":"Lightweight wide zoom for travel astro."},
+  {"id":"sigma-24-70-art","brand":"Sigma","model":"24-70mm f/2.8 DG DN II Art","mount":"Sony E","focalMin":24,"focalMax":70,"apertureMin":2.8,"apertureMax":22,"weight":735,"astroRating":3,"notes":"Standard zoom."},
+  {"id":"sigma-28-45","brand":"Sigma","model":"28-45mm f/1.8 DG DN Art","mount":"Sony E","focalMin":28,"focalMax":45,"apertureMin":1.8,"apertureMax":16,"weight":960,"astroRating":4,"notes":"Unique constant-f/1.8 mid-range zoom for astro."},
+  {"id":"sigma-35-14","brand":"Sigma","model":"35mm f/1.4 DG DN Art","mount":"Sony E","focalMin":35,"focalMax":35,"apertureMin":1.4,"apertureMax":16,"weight":645,"astroRating":4,"notes":"Mid-wide fast prime."},
+  {"id":"sigma-35-12","brand":"Sigma","model":"35mm f/1.2 DG DN Art","mount":"Sony E","focalMin":35,"focalMax":35,"apertureMin":1.2,"apertureMax":16,"weight":1090,"astroRating":4,"notes":"Heaviest f/1.2 35mm. Used carefully for astro."},
+  {"id":"sigma-85-14","brand":"Sigma","model":"85mm f/1.4 DG DN Art","mount":"Sony E","focalMin":85,"focalMax":85,"apertureMin":1.4,"apertureMax":16,"weight":625,"astroRating":3,"notes":"Tracked DSO portrait FL."},
+  {"id":"sigma-105-14","brand":"Sigma","model":"105mm f/1.4 DG HSM Art","mount":"Sony E","focalMin":105,"focalMax":105,"apertureMin":1.4,"apertureMax":16,"weight":1645,"astroRating":3,"notes":"Bokeh monster, works for tracked Milky Way panoramas."},
+
+  {"id":"samyang-14p","brand":"Samyang","model":"14mm f/2.4 Premium","mount":"Sony E","focalMin":14,"focalMax":14,"apertureMin":2.4,"apertureMax":22,"weight":805,"astroRating":4,"notes":"Manual-focus only. Sharp corner stars."},
+  {"id":"samyang-12","brand":"Samyang","model":"12mm f/2.0 NCS CS","mount":"Sony E","focalMin":12,"focalMax":12,"apertureMin":2.0,"apertureMax":22,"weight":245,"astroRating":4,"notes":"Budget APS-C astro prime — manual focus only."},
+  {"id":"samyang-af24","brand":"Samyang","model":"AF 24mm f/1.8 FE","mount":"Sony E","focalMin":24,"focalMax":24,"apertureMin":1.8,"apertureMax":22,"weight":230,"astroRating":4,"notes":"Tiny, has a dedicated Astro mode that recognises stars in AF."},
+
+  {"id":"canon-rf-1535","brand":"Canon","model":"RF 15-35mm f/2.8L IS","mount":"Canon RF","focalMin":15,"focalMax":35,"apertureMin":2.8,"apertureMax":22,"weight":840,"astroRating":4,"notes":"Pro wide zoom, IS."},
+  {"id":"canon-rf-16","brand":"Canon","model":"RF 16mm f/2.8 STM","mount":"Canon RF","focalMin":16,"focalMax":16,"apertureMin":2.8,"apertureMax":22,"weight":165,"astroRating":3,"notes":"Tiny ultra-wide prime."},
+  {"id":"canon-rf-24","brand":"Canon","model":"RF 24mm f/1.4L VCM","mount":"Canon RF","focalMin":24,"focalMax":24,"apertureMin":1.4,"apertureMax":16,"weight":515,"astroRating":5,"notes":"New L-series 24mm with VCM AF. Excellent for astro."},
+  {"id":"canon-rf-28-70","brand":"Canon","model":"RF 28-70mm f/2L","mount":"Canon RF","focalMin":28,"focalMax":70,"apertureMin":2.0,"apertureMax":22,"weight":1430,"astroRating":4,"notes":"Constant f/2 standard zoom. Big & heavy but ideal."},
+  {"id":"canon-rf-35","brand":"Canon","model":"RF 35mm f/1.4L VCM","mount":"Canon RF","focalMin":35,"focalMax":35,"apertureMin":1.4,"apertureMax":16,"weight":555,"astroRating":4,"notes":"New L-series 35mm."},
+  {"id":"canon-rf-50","brand":"Canon","model":"RF 50mm f/1.2L","mount":"Canon RF","focalMin":50,"focalMax":50,"apertureMin":1.2,"apertureMax":16,"weight":950,"astroRating":3,"notes":"Tracked star fields."},
+  {"id":"canon-rf-85","brand":"Canon","model":"RF 85mm f/1.2L","mount":"Canon RF","focalMin":85,"focalMax":85,"apertureMin":1.2,"apertureMax":16,"weight":1195,"astroRating":3,"notes":"Tracked DSO portrait FL."},
+
+  {"id":"nikon-z-1424","brand":"Nikon","model":"Z 14-24mm f/2.8 S","mount":"Nikon Z","focalMin":14,"focalMax":24,"apertureMin":2.8,"apertureMax":22,"weight":650,"astroRating":5,"notes":"One of the cleanest astro zooms available."},
+  {"id":"nikon-z-1430","brand":"Nikon","model":"Z 14-30mm f/4 S","mount":"Nikon Z","focalMin":14,"focalMax":30,"apertureMin":4.0,"apertureMax":22,"weight":485,"astroRating":3,"notes":"Compact f/4 wide zoom — needs tracking for nice MW."},
+  {"id":"nikon-z-20","brand":"Nikon","model":"Z 20mm f/1.8 S","mount":"Nikon Z","focalMin":20,"focalMax":20,"apertureMin":1.8,"apertureMax":16,"weight":505,"astroRating":5,"notes":"Excellent astro prime."},
+  {"id":"nikon-z-2470","brand":"Nikon","model":"Z 24-70mm f/2.8 S","mount":"Nikon Z","focalMin":24,"focalMax":70,"apertureMin":2.8,"apertureMax":22,"weight":805,"astroRating":3,"notes":"Standard zoom."},
+  {"id":"nikon-z-35","brand":"Nikon","model":"Z 35mm f/1.4","mount":"Nikon Z","focalMin":35,"focalMax":35,"apertureMin":1.4,"apertureMax":16,"weight":415,"astroRating":4,"notes":"Affordable wide prime."},
+  {"id":"nikon-z-50s","brand":"Nikon","model":"Z 50mm f/1.2 S","mount":"Nikon Z","focalMin":50,"focalMax":50,"apertureMin":1.2,"apertureMax":16,"weight":1090,"astroRating":3,"notes":"Tracked star fields."},
+
+  {"id":"fuji-xf-816","brand":"Fujifilm","model":"XF 8-16mm f/2.8 R LM WR","mount":"Fujifilm X","focalMin":8,"focalMax":16,"apertureMin":2.8,"apertureMax":22,"weight":805,"astroRating":4,"notes":"Ultra-wide APS-C zoom (≈12-24 FF eq)."},
+  {"id":"fuji-xf-16","brand":"Fujifilm","model":"XF 16mm f/1.4 R WR","mount":"Fujifilm X","focalMin":16,"focalMax":16,"apertureMin":1.4,"apertureMax":16,"weight":375,"astroRating":5,"notes":"Beloved APS-C astro prime (~24mm FF eq)."},
+  {"id":"fuji-xf-23","brand":"Fujifilm","model":"XF 23mm f/1.4 R LM WR","mount":"Fujifilm X","focalMin":23,"focalMax":23,"apertureMin":1.4,"apertureMax":16,"weight":375,"astroRating":4,"notes":"~35mm FF eq, sharp wide open."},
+  {"id":"fuji-xf-33","brand":"Fujifilm","model":"XF 33mm f/1.4 R LM WR","mount":"Fujifilm X","focalMin":33,"focalMax":33,"apertureMin":1.4,"apertureMax":16,"weight":360,"astroRating":3,"notes":"~50mm FF eq."},
+  {"id":"fuji-xf-56","brand":"Fujifilm","model":"XF 56mm f/1.2 R WR","mount":"Fujifilm X","focalMin":56,"focalMax":56,"apertureMin":1.2,"apertureMax":16,"weight":445,"astroRating":3,"notes":"~85mm FF eq — tracked DSO."},
+
+  {"id":"om-825","brand":"OM System","model":"M.Zuiko 8-25mm f/4 PRO","mount":"Micro Four Thirds","focalMin":8,"focalMax":25,"apertureMin":4.0,"apertureMax":22,"weight":410,"astroRating":3,"notes":"~16-50 FF eq ultra-wide zoom for MFT."},
+  {"id":"om-1240","brand":"OM System","model":"M.Zuiko 12-40mm f/2.8 PRO II","mount":"Micro Four Thirds","focalMin":12,"focalMax":40,"apertureMin":2.8,"apertureMax":22,"weight":382,"astroRating":3,"notes":"~24-80 FF eq standard zoom."},
+  {"id":"om-17pro","brand":"OM System","model":"M.Zuiko 17mm f/1.2 PRO","mount":"Micro Four Thirds","focalMin":17,"focalMax":17,"apertureMin":1.2,"apertureMax":16,"weight":390,"astroRating":4,"notes":"~34mm FF eq fast prime."},
+
+  {"id":"panasonic-l-2470","brand":"Panasonic","model":"Lumix S 24-70mm f/2.8","mount":"Leica L","focalMin":24,"focalMax":70,"apertureMin":2.8,"apertureMax":22,"weight":935,"astroRating":3,"notes":"L-mount standard zoom."},
+  {"id":"panasonic-l-1635","brand":"Panasonic","model":"Lumix S Pro 16-35mm f/4","mount":"Leica L","focalMin":16,"focalMax":35,"apertureMin":4.0,"apertureMax":22,"weight":500,"astroRating":3,"notes":"Compact L-mount wide zoom."},
+
+  {"id":"samsung-main","brand":"Samsung","model":"S25+ main (24mm equiv)","mount":"Phone — main","focalMin":24,"focalMax":24,"apertureMin":1.7,"apertureMax":1.7,"weight":0,"astroRating":3,"notes":"Built-in main. Expert RAW manual mode for astro."},
+  {"id":"samsung-uw","brand":"Samsung","model":"S25+ ultrawide (13mm equiv)","mount":"Phone — main","focalMin":13,"focalMax":13,"apertureMin":2.2,"apertureMax":2.2,"weight":0,"astroRating":3,"notes":"~13mm equiv ultrawide. Some distortion."},
+  {"id":"iphone-main","brand":"Apple","model":"iPhone 16 Pro main (24mm equiv)","mount":"Phone — main","focalMin":24,"focalMax":24,"apertureMin":1.78,"apertureMax":1.78,"weight":0,"astroRating":3,"notes":"Use Halide / NightCap for true manual control."},
+  {"id":"pixel-main","brand":"Google","model":"Pixel 9 Pro main (25mm equiv)","mount":"Phone — main","focalMin":25,"focalMax":25,"apertureMin":1.68,"apertureMax":1.68,"weight":0,"astroRating":4,"notes":"Pixel Astrophotography mode handles stacking automatically."}
+]

@@ -1,0 +1,64 @@
+{
+  "name": "skywatch",
+  "version": "1.0.0",
+  "description": "Astrophotography planner PWA + desktop app — live cloud forecasts, moon, deep-sky targets, NPF rule, session log.",
+  "main": "electron/main.js",
+  "homepage": "./",
+  "scripts": {
+    "start": "electron .",
+    "screenshots": "electron scripts/capture-screenshots.js",
+    "build:catalogs": "node scripts/build-catalogs.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
+  },
+  "keywords": ["astrophotography", "pwa", "astronomy", "milky-way", "photography"],
+  "author": "SkyWatch contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "io.skywatch.app",
+    "productName": "SkyWatch",
+    "directories": {
+      "output": "dist",
+      "buildResources": "."
+    },
+    "files": [
+      "electron/**/*",
+      "index.html",
+      "manifest.webmanifest",
+      "sw.js",
+      "icon.svg",
+      "icon-192.png",
+      "icon-512.png",
+      "css/**/*",
+      "js/**/*",
+      "data/**/*"
+    ],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }, { "target": "portable", "arch": ["x64"] }],
+      "icon": "icon-512.png"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "icon-512.png",
+      "category": "public.app-category.photography"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "icon-512.png",
+      "category": "Photography"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
