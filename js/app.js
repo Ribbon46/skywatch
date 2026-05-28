@@ -1341,6 +1341,61 @@ const App = (() => {
     try { VIEWS[which](); } catch(e){ console.error(e); toast('Render error: '+e.message, 'bad'); }
   }
 
+  /* ============== Launch-time intents ==============
+   * Handles three manifest features that all surface as launches:
+   *   - file_handlers      → window.launchQueue with the dropped/opened file
+   *   - share_target       → URL params (shared_text, shared_url, shared_title)
+   *   - protocol_handlers  → URL param ?spot=<id> from web+skywatch://<id>
+   */
+  function handleLaunchIntent(){
+    /* 1. file_handlers — opened .json file becomes a log import */
+    if ('launchQueue' in window) {
+      window.launchQueue.setConsumer(async (params) => {
+        if (!params.files || !params.files.length) return;
+        try {
+          const blob = await params.files[0].getFile();
+          const text = await blob.text();
+          const n = SessionLog.importJson(text);
+          toast(`Imported ${n} log entries from file`);
+          if ($('#view-log').children.length) viewLog();
+        } catch (e) {
+          toast('Could not import file: ' + e.message, 'bad', 4000);
+        }
+      });
+    }
+
+    /* 2 + 3. URL params */
+    const params = new URLSearchParams(location.search);
+    if (params.has('shared_text') || params.has('shared_url') || params.has('shared_title')) {
+      const text = params.get('shared_text') || '';
+      const url  = params.get('shared_url')  || '';
+      const title = params.get('shared_title') || 'Shared location';
+      const m = (text + ' ' + url).match(/(-?\d+\.\d+)[ ,;]+(-?\d+\.\d+)/);
+      if (m) {
+        const lat = parseFloat(m[1]), lon = parseFloat(m[2]);
+        if (Math.abs(lat) <= 90 && Math.abs(lon) <= 180 &&
+            confirm(`Add a new site "${title}" at ${lat.toFixed(4)}, ${lon.toFixed(4)}?`)) {
+          const site = Sites.save({name: title, lat, lon, elevation: 0, bortle: 6, notes: 'Added via share target'});
+          setSite(site);
+          toast('Site added');
+        }
+      } else {
+        toast('Shared data did not contain coordinates', 'bad', 3500);
+      }
+    }
+    if (params.has('spot')) {
+      const id = params.get('spot');
+      const curated = window.PLANNER_SPOTS_DATA || [];
+      const all = window.Planner ? (Planner.spots() || []) : curated;
+      const s = all.find(x => x.id === id) || curated.find(x => x.id === id);
+      if (s) { location.hash = '#planner'; toast(`Spot: ${s.name}`); }
+    }
+    /* Clean URL params so reloads don't re-trigger */
+    if (params.toString()) {
+      history.replaceState({}, '', location.pathname + location.hash);
+    }
+  }
+
   /* ============== Init ============== */
   async function init(){
     $('#sitePill').addEventListener('click', openSiteSwitcher);
@@ -1351,10 +1406,9 @@ const App = (() => {
     window.addEventListener('hashchange', router);
     document.addEventListener('visibilitychange', () => { if(!document.hidden) refreshForecast(); });
     state.autoRefreshHandle = setInterval(refreshForecast, 30*60*1000);
-    if('serviceWorker' in navigator &&
-       (location.protocol === 'https:' || location.protocol === 'http:')){
-      navigator.serviceWorker.register('sw.js').catch(()=>{});
-    }
+    handleLaunchIntent();
+    /* SW registration moved to an inline <script> in index.html so PWA
+     * detectors (Lighthouse / PWABuilder) see it before the bundle loads. */
   }
 
   window.addEventListener('DOMContentLoaded', init);

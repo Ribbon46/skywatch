@@ -12,6 +12,16 @@
 <link rel="icon" href="icon.svg" />
 <link rel="apple-touch-icon" href="icon-192.png" />
 <link rel="stylesheet" href="css/app.css" />
+<script>
+  /* Register the service worker as early as possible so PWA detectors
+   * (Lighthouse, PWABuilder) see it before the main app bundle loads. */
+  if ('serviceWorker' in navigator &&
+      (location.protocol === 'https:' || location.protocol === 'http:')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => { /* offline-tolerant */ });
+    });
+  }
+</script>
 </head>
 <body>
 

@@ -4,7 +4,7 @@
  *   - Cache-first for app shell + data + scripts (offline-first)
  *   - Skip-waiting + claim so updates take effect on next reload
  */
-const VERSION = 'skywatch-v5';
+const VERSION = 'skywatch-v6';
 const SHELL = [
   './', './index.html', './manifest.webmanifest',
   './css/app.css',
@@ -15,7 +15,8 @@ const SHELL = [
   './data/messier.json', './data/ngc.json', './data/stars.json',
   './data/meteor-showers.json', './data/cameras.json', './data/lenses.json',
   './data/planner-spots.json',
-  './icon.svg', './icon-192.png', './icon-512.png'
+  './icon.svg', './icon-192.png', './icon-512.png',
+  './icon-192-maskable.png', './icon-512-maskable.png', './icon-monochrome.svg'
 ];
 
 self.addEventListener('install', e => {
